@@ -16,6 +16,7 @@ public:
 	void SetAge(int a);
 	char* GetName();
 	int GetAge();
+	Student& operator=(Student& b);
 };
 
 Student::Student()
@@ -33,7 +34,6 @@ Student::Student(const char* n, int a)
 
 Student::Student(const Student& obj)
 {
-	cout << "Copy constructor\n";
 	name = new char[strlen(obj.name) + 1];
 	strcpy_s(name, strlen(obj.name) + 1, obj.name);
 	age = obj.age;
@@ -48,7 +48,7 @@ Student::~Student()
 
 void Student::Print()
 {
-	cout << "Name: " << name << "Age: " << age << endl;
+	cout << "Name: " << name << " | Age: " << age << endl;
 }
 
 void Student::Input()
@@ -91,9 +91,28 @@ int Student::GetAge()
 	return age;
 }
 
+Student& Student::operator=(Student& b)
+{
+	if (this == &b)
+	{
+		return *this;
+	}
+	if (name != nullptr)
+	{
+		delete[] name;
+	}
+	name = new char[strlen(b.name) + 1];
+	strcpy_s(name, strlen(b.name) + 1, b.name);
+	age = b.age;
+	return *this;
+}
+
 int main()
 {
-	Student s1("Ivan ", 16);
+	Student s1("Ivan", 16);
 	s1.Print();
-	Student s2 = s1;
+	Student s2("Sofia", 21);
+	s2.Print();
+	s2 = s1;
+	s2.Print();
 }
